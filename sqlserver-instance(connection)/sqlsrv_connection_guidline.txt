@@ -1,0 +1,29 @@
+ // install this .exe file or download php sql driver this link  
+    nb: when instal .exe file then autometic download .dll into the selected folder
+    https://docs.microsoft.com/en-us/sql/connect/php/always-encrypted-secure-enclaves?view=sql-server-ver15
+
+ // add .dll file into the php.ini 
+
+    extension=php_sqlsrv_72_nts_x64.dll
+    extension=php_sqlsrv_72_nts_x86.dll
+    extension=php_sqlsrv_72_ts_x64.dll
+    extension=php_sqlsrv_72_ts_x86.dll
+    extension=php_pdo_sqlsrv_72_ts_x64
+    extension=php_sqlsrv_72_ts_x64 
+
+
+
+ // install odbc driver + add odbc.dll
+    extension=php_odbc.dll
+
+ <?php 
+	$serverName = "DESKTOP-T4KF754"; //serverName\instanceName
+	$connectionInfo = array( "Database"=>"remitbook_dbl", "UID"=>"sa", "PWD"=>"venture");
+	$connect = sqlsrv_connect( $serverName, $connectionInfo);
+	if(!$connect){
+        echo "Connection could not be established.<br />";
+        echo "<pre>";
+     	die( print_r( sqlsrv_errors(), true));
+    } 
+
+ ?>
