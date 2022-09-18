@@ -1,0 +1,47 @@
+    public function store(Request $request){
+
+        $rack_code = $request->input('rack_code');
+        $agent_id  = $request->input('agent_id');
+        $shop_id   = $request->input('shop_id');
+        $rack_delivery_date   = $request->input('rack_delivery_date');
+
+        $checkData = DB::table('rack_mapping')->where('rack_code', $rack_code)->count();
+      
+        if($checkData > 0){
+            $data = [
+                "status" => 400,
+                "message" => "This rack already mapping this shop"
+            ];
+            return response()->json($data);
+        }
+
+        try{
+            DB::table('rack_mapping')->insert([
+                "agent_id"       => $agent_id,
+                "shop_id"        => $shop_id,
+                "rack_code"      => $rack_code,
+                "entry_user_id"  => Auth::user()->id,
+                "entry_datetime" => date('Y-m-d H:i:s'),
+                "shop_reg_date"  =>  date('Y-m-d',strtotime($rack_delivery_date))
+            ]);
+
+            $this->updateRackSockAgentShop($agent_id, $shop_id, $rack_code);
+
+            $data = [
+                "status" => 200,
+                "message" => "Rack mapping success"
+            ];
+
+
+            $this->SotrereckRefillVoucher($shop_id, $rack_code);
+
+
+            return response()->json($data);
+        }catch(Exception $e){
+            $data = [
+                "status" => 400,
+                "message" => $e->getMessage()
+            ];
+            return response()->json($data);
+        }
+    }
