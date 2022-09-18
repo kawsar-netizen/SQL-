@@ -1,0 +1,11 @@
+    public function create(){
+        $racks  = DB::table('racks')->select('rack_code', 'rack_category', 'total_count')->get();
+        $agents = DB::table('agent_users')->select('id', 'name')->get();
+        $shops  = DB::table('shops')->select('id', 'name')->get();
+        $data   = [
+            "racks"  => $racks,
+            "agents" => $agents,
+            "shops"  => $shops,
+        ];
+        return view('rack.rack-mapping.create', $data);
+    }
