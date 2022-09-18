@@ -1,0 +1,21 @@
+    public function index(){
+
+        $racks = DB::table('rack_mapping as rm')
+                ->select([
+                    'rm.rack_code',
+                    'au.name as agent_name',
+                    's.name as shop_name',
+                    'ui.name as user_name',
+                    'rm.entry_datetime'
+                ])
+                ->leftJoin('agent_users as au', 'rm.agent_id', 'au.id')
+                ->leftJoin('shops as s', 'rm.shop_id', 's.id')
+                ->leftJoin('users as ui', 'rm.entry_user_id', 'ui.id')
+                ->get();
+        
+        $data = [
+            "racks" => $racks,
+            "sl" => 1
+        ];
+        return view('rack.rack-mapping.index', $data);
+    }
